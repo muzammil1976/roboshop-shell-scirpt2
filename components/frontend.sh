@@ -1,1 +1,2 @@
-echo install rontend component
+echo install frontend component
+
