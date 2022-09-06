@@ -1,5 +1,7 @@
 frontend:
 	@bash components/frontend.sh
+	@bash components/frontend.sh
+	@bash components/frontend.sh
 redis:
 	@bash components/redis.sh
 rabbitmq:
@@ -18,3 +20,4 @@ payment:
 	@bash components/payment.sh
 user:
 	@bash components/user.sh
+	
