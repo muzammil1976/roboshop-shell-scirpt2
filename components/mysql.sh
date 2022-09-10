@@ -5,8 +5,9 @@ systemctl start mysqld
 
 MYSQL_DEFAULT_PASSWARD=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
 
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASSWARD';" >/tmp/mysql
-mysql --connect-expire-password -uroot -p"${MYSQL_DEFAULT_PASSWARD}" </tmp/mysql
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASSWARD';" >/tmp/mysql | mysql --connect-expire-password -uroot -p"${MYSQL_DEFAULT_PASSWARD}" </tmp/mysql
+
+ccho "uninstall plugin validate_passward;" | mysql -uroot -p"${MYSQL_PASSWARD}"
 
 1. Now a default root password will be generated and given in the log file.
 
