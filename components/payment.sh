@@ -1,5 +1,5 @@
 yum install python36 gcc python3-devel -y
-seradd roboshop
+useradd roboshop
 cd /home/roboshop
 rm -rf payment
 curl -L -s -o /tmp/payment.zip "https://github.com/roboshop-devops-project/payment/archive/main.zip"
