@@ -2,7 +2,15 @@ source components/common.sh
 
 CHECK_ROOT
 
-url -sL https://rpm.nodesource.com/setup_lts.x | bash
+echo "setting up NodeJS YUM Repo is "
+url -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
+if [ $? -ne 0 ]; then
+  echo FAILED
+  exit 2
+else
+  echo SUCCESS
+fi
+
 yum install nodejs -y
 useradd roboshop
 curl -s -L -o /tmp/cart.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip"
