@@ -5,8 +5,8 @@ CHECK _ROOT() {
       echo you can run this script as root user or with sudo
       exit 1
   fi
-
 }
+
 CHECK_ROOT
 
 url -sL https://rpm.nodesource.com/setup_lts.x | bash
