@@ -31,15 +31,16 @@ CHECK_STAT $?
 mv cart-main cart
 cd cart
 
-PRINT "install NodeJS Dependencis for Cart Component"
+PRINT "install NodeJS Dependencies for Cart Component"
 rpm install &>>${LOG}
 CHECK_STAT $?
 
-PRINT "Update SystemDConfiguratiion"
+PRINT "Update SystemD Configuration"
+
 sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal1976/' -e 'CATALOGUE_ENDPOINT/catalogue.roboshop.internal1976/' /home/roboshop/cart/systemd.service &>>${LOG}
 CHECK_STAT $?
 
-PRINT "Setup SystemD Configuratiion "
+PRINT "Setup SystemD Configuration "
 mv /home/roboshop/cart/systemd.service /etc/systemd/system/cart.service
 CHECK_STAT $?
 
