@@ -18,7 +18,7 @@ fi
 CHECK_STAT $?
 
 PRINT "Downloading Cart Content"
-curl -s -L -o /tmp/cart.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip" &>>${log}
+curl -s -L -o /tmp/cart.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip" &>>${LOG}
 CHECK_STAT $?
 
 cd /home/roboshop
