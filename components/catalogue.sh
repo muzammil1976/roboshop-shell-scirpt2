@@ -1,6 +1,22 @@
 source components/common.sh
 
 CHECK_ROOT
+
+PRINT "setting up NodeJS YUM Repo is "
+url -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
+CHECK_STAT $?
+
+PRINT "Installing NodeJS"
+yum install nodejs -y &>>${LOG}
+CHECK_STAT $?
+
+PRINT "Creating Application User"
+id roboshop &>>${LOG}
+if [ $? -ne 0 ]; then
+  useradd roboshop &>>${LOG}
+fi
+CHECK_STAT $?
+
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
 yum install nodejs -y
 
