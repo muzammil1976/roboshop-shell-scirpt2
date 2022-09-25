@@ -87,6 +87,7 @@ NGINX() {
   PRINT "Download ${COMPONENT} Content"
   curl -s -L -o /tmp/frontend.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip"
   CHECK_STAT $?
+
   PRINT "Clean OLD Content"
   cd/usr/share/nginx/html
   rm -rf * &>>${LOG}
