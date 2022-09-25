@@ -23,6 +23,30 @@ PRINT() {
   echo "--------$1 -------" >>${LOG}
   echo "$1"
 }
+APP_COMMON_SETUP() {
+
+ PRINT "Creating Application User"
+  id roboshop &>>${LOG}
+  if [ $? -ne 0 ]; then
+    useradd roboshop &>>${LOG}
+  fi
+  CHECK_STAT $?
+
+  PRINT "Downloading Cart Content"
+  curl -s -L -o /tmp/cart.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip" &>>${LOG}
+  CHECK_STAT $?
+
+  cd /home/roboshop
+
+  PRINT  "Remove old content"
+  rm -rf cart &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT  "Exrtact old content"
+  unzip /tmp/cart.zip &>>${LOG}
+  CHECK_STAT $?
+
+}
 NODEJS() {
 
   CHECK_ROOT
@@ -34,6 +58,8 @@ NODEJS() {
   PRINT "Installing NodeJS"
   yum install nodejs -y &>>${LOG}
   CHECK_STAT $?
+
+  APP_COMMON_SETUP
 
   PRINT "Creating Application User"
   id roboshop &>>${LOG}
@@ -112,4 +138,26 @@ NGINX() {
   CHECK_STAT $?
 
 
+}
+MAVEN() {
+  CHECK_ROOT
+  PRINT "Installing Maven"
+  yum install maven -y
+  CHECK_STAT $?
+
+  useradd roboshop
+  cd /home/roboshop
+  rm -rf shipping
+  curl -s -L -o /tmp/shipping.zip "https://github.com/roboshop-devops-project/shipping/archive/main.zip"
+  unzip /tmp/shipping.zip
+  mv shipping-main shipping
+  cd shipping
+  mvn clean package
+  mv target/shipping-1.0.jar shipping.jar
+  sed -i -e 's/CARTENDPOINT/cart.roboshop.internal1976/' -e 's/DBHOST/mysql.roboshop.internal1976/' /home/roboshop/shipping/sysytemd.service
+
+  mv /home/roboshop/shipping/systemd.service /etc/systemd/system/shipping.service
+  systemctl daemon-reload
+  systemctl start shipping
+  systemctl enable shipping
 }
