@@ -73,5 +73,28 @@ NODEJS() {
   CHECK_STAT $?
 
   systemctl daemon-reload
-  systemctl restart cart
+
   systemctl enable cart
+  PRINT "Start ${COMPONENT} service"
+  systemctl restart ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+}
+
+NGINX() {
+yum install nginx -y
+systemctl enable nginx
+systemctl start nginx
+curl -s -L -o /tmp/frontend.zip "https://github.com/roboshop-devops-project/frontend/archive/main.zip"
+cd/usr/share/nginx/html
+rm -rf *
+unzip /tmp/frontend.zip
+mv frontend-main/*
+mv static/* .
+rm -rf frontend-main README.dm
+mv localhost.conf /etc/nginx/default.d/roboshop.conf
+sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal1976/' -e '/user/ s/localhost/user.roboshop.internal1976/' -e '/cart/ s/localhost/cart.roboshop.internal1976/'
+-e '/payment/ s/localhost/payment.roboshop.internal1976/' -e '/shipping/ s/localhost/shipping.roboshop.internal/'
+/etc/nginx/default.d/robpshop.conf
+systemctl restart nginx
+
+}
