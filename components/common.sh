@@ -47,6 +47,23 @@ APP_COMMON_SETUP() {
   CHECK_STAT $?
 
 }
+SystemD () {
+
+   PRINT "Update SystemD Configuration"
+
+    sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal1976/' -e 'CATALOGUE_ENDPOINT/catalogue.roboshop.internal1976/' /home/roboshop/cart/systemd.service &>>${LOG}
+    CHECK_STAT $?
+
+    PRINT "Setup SystemD Configuration "
+    mv /home/roboshop/cart/systemd.service /etc/systemd/system/${COMPONENT}.service &>>{log} && systemctl daemon-reload
+    CHECK_STAT $?
+
+
+
+    PRINT "Start ${COMPONENT} service"
+    systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
+    CHECK_STAT $?
+}
 NODEJS() {
 
   CHECK_ROOT
@@ -103,6 +120,8 @@ NODEJS() {
   PRINT "Start ${COMPONENT} service"
   systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
   CHECK_STAT $?
+SYSTEMD
+
 }
 
 NGINX() {
