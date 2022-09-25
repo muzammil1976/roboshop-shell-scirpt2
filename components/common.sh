@@ -81,20 +81,23 @@ NODEJS() {
 }
 
 NGINX() {
-yum install nginx -y
-systemctl enable nginx
-systemctl start nginx
-curl -s -L -o /tmp/frontend.zip "https://github.com/roboshop-devops-project/frontend/archive/main.zip"
-cd/usr/share/nginx/html
-rm -rf *
-unzip /tmp/frontend.zip
-mv frontend-main/*
-mv static/* .
-rm -rf frontend-main README.dm
-mv localhost.conf /etc/nginx/default.d/roboshop.conf
-sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal1976/' -e '/user/ s/localhost/user.roboshop.internal1976/' -e '/cart/ s/localhost/cart.roboshop.internal1976/'
--e '/payment/ s/localhost/payment.roboshop.internal1976/' -e '/shipping/ s/localhost/shipping.roboshop.internal/'
-/etc/nginx/default.d/robpshop.conf
-systemctl restart nginx
+  PRINT "Installing Nginx"
+  yum install nginx -y &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "Download ${COMPONENT} Content"
+  curl -s -L -o /tmp/frontend.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip"
+  CHECK_STAT $?
+  cd/usr/share/nginx/html
+  rm -rf *
+  unzip /tmp/frontend.zip
+  mv frontend-main/*
+  mv static/* .
+  rm -rf frontend-main README.dm
+  mv localhost.conf /etc/nginx/default.d/roboshop.conf
+  sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal1976/' -e '/user/ s/localhost/user.roboshop.internal1976/' -e '/cart/ s/localhost/cart.roboshop.internal1976/'
+  -e '/payment/ s/localhost/payment.roboshop.internal1976/' -e '/shipping/ s/localhost/shipping.roboshop.internal/'
+  /etc/nginx/default.d/robpshop.conf
+  systemctl restart nginx
 
 }
