@@ -1,6 +1,11 @@
 source components/common.sh
 
 CHECK_ROOT
+if [ -z "${MYSQL_PASSWORD}" ]; then
+  echo "Need MYSQL_PASSWARD env variable"
+  exit
+fi
+
 PRINT "configure YUM repos"
 
 curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo &>>${LOG}
