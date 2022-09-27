@@ -1,7 +1,5 @@
 frontend:
 	@bash components/frontend.sh
-	@bash components/frontend.sh
-	@bash components/frontend.sh
 redis:
 	@bash components/redis.sh
 rabbitmq:
