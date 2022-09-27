@@ -3,12 +3,12 @@ source components/common.sh
 CHECK_ROOT
 PRINT "configure YUM repos"
 
-curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo &>>${LOG_FILE}
+curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo &>>${LOG}
 CHECK_STAT $?
 
 PRINT "install MySQL"
-yum install mysql-community-server -y &>>${LOG_FILE}
-systemctl enable mysqld &>>${LOG_FILE} && systemctl start mysqld &>>${LOG_FILE}
+yum install mysql-community-server -y &>>${LOG}
+systemctl enable mysqld &>>${LOG} && systemctl start mysqld &>>${LOG}
 CHECK_STAT $?
 
 MYSQL_DEFAULT_PASSWARD=$(grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
